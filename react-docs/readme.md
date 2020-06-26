@@ -9,3 +9,5 @@
     1. **Two-way Binding**
     1. **Basic Styling**
 1.  **[LISTS AND CONDITIONALS](./2-lists-and-conditionals.md)**
+    1. **Rendering Conditional Content**
+    1. **Outputting Lists**

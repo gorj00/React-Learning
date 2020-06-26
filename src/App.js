@@ -5,38 +5,57 @@ import Person from './Person/Person';
 const App = props => {
   const initialState = {
     persons: [
-        { name: 'John', age: 29},
-        { name: 'Anne', age: 30}
+        { name: 'John', age: 29, id: 'we5dwd5'},
+        { name: 'Anne', age: 30, id: 'eef5fe5'}
     ],
-    iWillBeMerged: true
+    showPeople: false,
   };
 
   const [peopleState, setPeopleState] = useState(initialState);
 
-  // const [mergeState, setMergeState] = useState(
-  //   {...peopleState, iWillBeMerged: true}
-  //   );
+  const deletePersonHandler = personIndex => {
+    // Reference type! cannot change the current state with splice()
+    // const people = peopleState.persons;
+    const people = [...peopleState.persons];
+    // removing that person
+    people.splice(personIndex, 1);
 
-  const switchNameHandler = () => {
+    // updating the state
     setPeopleState({
       ...peopleState,
-      persons: [
-        { name: 'Max', age: 29},
-        { name: 'Bob', age: 22}
-      ]
+      persons: people
     });
   }
 
-  const nameChangeHandler = event => {
+  const nameChangeHandler = (event, id) => {
+    // Find the index of current person
+    const personIndex = peopleState.persons.findIndex(p => {
+      return p.id === id;
+    });
+ 
+    // Update the his name
+    const person = {...peopleState.persons[personIndex]};
+    person.name = event.target.value;
+
+    // Update the persons
+    const persons = [...peopleState.persons];
+    persons[personIndex] = person;
+
+    // Update the state
     setPeopleState({
       ...peopleState,
-      persons: [
-        { name: event.target.value, age: 29},
-        { name: 'Anne', age: 30}
-      ]
+      persons
     });
   }
   
+  const togglePersonHandler = () => {
+    const isShowing = peopleState.showPeople;
+    setPeopleState({
+      ...peopleState,
+      showPeople: !isShowing
+    });
+  }
+
   const style = {
     backgroundColor: 'white',
     font: 'inherit',
@@ -45,23 +64,35 @@ const App = props => {
     cursor: 'pointer'
   };
 
+  // Handling conditional logic for people
+  let people = null;
+  if (peopleState.showPeople) {
+    people = (
+      // JSX expression
+      <div>
+        {peopleState.persons.map((person, index) => {
+          return (
+            <Person
+              name={person.name}
+              age={person.age}
+              change={event => nameChangeHandler(event, person.id)}
+              clickRef={() => deletePersonHandler(index)}
+              key={person.id}
+            />
+          );
+        })}
+      </div>
+    );
+  }
+
   return ( 
     <div className="App"> 
       <header className="App-header">
         <button 
           style={style}
-          onClick={switchNameHandler}
-        >Switch Name</button>
-          <Person 
-              name={peopleState.persons[0].name} 
-              age={peopleState.persons[0].age} 
-              change={nameChangeHandler}
-          />
-          <Person 
-              name={peopleState.persons[1].name} 
-              age={peopleState.persons[1].age}
-              clickRef={switchNameHandler}
-          />
+          onClick={togglePersonHandler}
+        >Show People</button>
+        {people}
       </header>
     </div>
   );
