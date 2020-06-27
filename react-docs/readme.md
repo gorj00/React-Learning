@@ -12,3 +12,5 @@
     1. **Outputting Lists**
 1. **[STYLING](./3-styling.md)**
     1. **Basic Styling**
+    1. **Dynamic Styles**
+    1. **Radium – pseudo selectors and media queries (inline styles)**

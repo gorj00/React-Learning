@@ -124,7 +124,7 @@ export default person;
 
 **Creating a multiple classes list**:
 - define an array of dynamic **class names** of classes defined in the stylesheet,
-- pply **join** method on them with an **empty space**,
+- apply **join** method on them with an **empty space**,
 - example: `const classes = [...dynamicClassNames].join(' ')`
 - it will result in `'className1 className2 className3'`,
 - assign this _classes_ to the **className** property of the component/element `<button className={classes}>Click me</button>`,
@@ -154,7 +154,7 @@ if (peopleState.persons.length <= 1) {
 - **import** _radium_ in your component file `import Radium from radium`,
 - **wrap** your component _export_ with Radium higher level component `export default Radium(ComponentName)`.
 
-### Using _pseudo selectors_ (:hover, :visisted etc.)
+### 3.1 Using _pseudo selectors_ (:hover, :visisted etc.)
 - In the object, where defining the inline styles, **create** a pseudo selector property in **quatation marks** and **assign** it its own object of styles,
 **hover** style example:
 ```jsx
@@ -181,4 +181,4 @@ if (peopleState.persons.length <= 1) {
     }
 ```
 
-### Using _media queries_
+### 3.2 Using _media queries_
