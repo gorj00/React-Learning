@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import './App.css';
 import Person from './Person/Person';
+import Radium from 'radium';
 
 const App = props => {
   const initialState = {
     persons: [
         { name: 'John', age: 29, id: 'we5dwd5'},
-        { name: 'Anne', age: 30, id: 'eef5fe5'}
+        { name: 'Anne', age: 30, id: 'eef5fe5'},
+        { name: 'Maria', age: 20, id: 'ssef6f2'}
     ],
     showPeople: false,
   };
@@ -61,8 +63,14 @@ const App = props => {
     font: 'inherit',
     border: '1px solid grey',
     padding: '8px',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    ':hover': {
+      backgroundColor: 'lightgreen',
+      color: 'black'
+    }
   };
+
+  const classes = [];
 
   // Handling conditional logic for people
   let people = null;
@@ -83,11 +91,25 @@ const App = props => {
         })}
       </div>
     );
+
+    if (peopleState.persons.length <= 2) {
+      classes.push('red'); // classes = ['red']
+    }
+    if (peopleState.persons.length <= 1) {
+        classes.push('bold'); // classes = ['bold']
+    }
+
+    style.backgroundColor = 'red';
+    style[':hover'] = {
+      backgroundColor: 'salmon',
+      color: 'black'
+    }
   }
 
   return ( 
     <div className="App"> 
       <header className="App-header">
+        <p className={classes.join(' ')}>Working dynamic styles!</p>
         <button 
           style={style}
           onClick={togglePersonHandler}
@@ -98,4 +120,4 @@ const App = props => {
   );
 }
 
-export default App;
+export default Radium(App);
