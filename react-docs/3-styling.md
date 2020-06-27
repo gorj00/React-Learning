@@ -151,11 +151,26 @@ if (peopleState.persons.length <= 1) {
 **Radium** allows to use **pseudo selectors** and **media queries** in **inline styles**.
 
 - **Install** _radium_ with `npm install --save radium`,
-- **import** _radium_ in your component file `import Radium from radium`,
-- **wrap** your component _export_ with Radium higher level component `export default Radium(ComponentName)`.
+- **import** _radium_ and _StyleRoot_ in your component file `import Radium, { StyleRoot } from 'radium'`,
+- **wrap** your component _export_ with Radium higher level component `export default Radium(ComponentName)`,
+- **wrap** your **entire app**'s JSX return in _StyleRoot_ element (necessary for _media queries_, possible to omit for _pseudo elements_):
+```jsx
+// app.js
+
+// ... component code ...
+
+  return ( 
+    <StyleRoot>
+      <div className="App"> 
+        // ... JSX code ...
+      </div>
+    </StyleRoot>
+  );
+
+```
 
 ### 3.1 Using _pseudo selectors_ (:hover, :visisted etc.)
-- In the object, where defining the inline styles, **create** a pseudo selector property in **quatation marks** and **assign** it its own object of styles,
+- In the object, where defining the inline styles, **create** a **pseudo selector** property in **quatation marks** and **assign** it its own object of styles,
 **hover** style example:
 ```jsx
   const style = {
@@ -182,3 +197,55 @@ if (peopleState.persons.length <= 1) {
 ```
 
 ### 3.2 Using _media queries_
+- In the object, where defining the inline styles, **create** a **media queries selector** property in **quatation marks** and **assign** it its own object of styles,
+- **example**:
+```jsx
+  const style = {
+    backgroundColor: 'white',
+    color: 'grey',
+    '@media (min-width: 500px)': {
+        width: '450px'
+    }
+  };
+```
+
+## 4 CSS Modules
+CSS modules allow to **scope** the styles only to the component (styles are not global).
+
+- Requires _react-scripts@2.0.0+_,
+- create a CSS module stylesheet file `moduleName.module.css`,
+- in the component file, **import** the CSS module as **styles** `import styles from './moduleName.module.css'`,
+- in the component file, **access** the class name on the _styles_ object with dot notation `<Element className={styles.className1} />` or with square brackets `<Element className={styles['class-name-1']} />`,
+- the CSS module's class name results in **[filename]\_[classname]\_\_[hash]**,
+- **example**: 
+
+```jsx
+// Person.css - applied globally
+.text-colored {
+    color: blue;
+}
+```
+```jsx
+// Person.module.css - scoped to Person component only
+.text-colored {
+    color: red;
+}
+
+```
+```jsx
+// Person.js
+import './Person.css';
+import styles from './Person.module.css';
+
+const person = (props) => {
+
+    return (
+        <div className="Person">
+            <p className={styles['text-colored']}>I'm {props.name} and I am {props.age} years old!</p>
+        </div>
+    )
+};
+```
+- results in `<p class="Person_error__11mkS">` => **red** text
+  - the style from CSS module is applied, 
+  - the style from the global stylesheet is not

@@ -14,3 +14,4 @@
     1. **Basic Styling**
     1. **Dynamic Styles**
     1. **Radium – pseudo selectors and media queries (inline styles)**
+    1. **CSS Modules**

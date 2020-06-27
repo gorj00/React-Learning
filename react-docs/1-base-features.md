@@ -377,8 +377,8 @@ export default person;
 #### 5.1.1 Using bind()
 - Bind your method call to reference the class (this) with **bind()** method on your reference method call,
 - next, list what will be **passed** to the function in the _bind()_ method
-#### 5.1.1 Using arrow function
-- Chnage method call reference into an **arrow function** returning method **call**,
+#### 5.1.2 Using arrow function
+- Change method call reference into an **arrow function** returning method **call**,
 - bind() method is preferred due to React rerendering too often
 ```jsx
 // People.js
@@ -426,7 +426,7 @@ class People extends Component {
 ```
 ### 5.2 Passing Values in Functional Components
 #### 5.2.1 Using arrow function
-- Chnage method call reference into an arrow function returning method call,
+- Change method call reference into an arrow function returning method call,
 - assuming the example of class component arrow function passing a value above, **example** of functional component implementation: 
 ```jsx
 // ...component code

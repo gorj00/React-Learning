@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import Person from './Person/Person';
-import Radium from 'radium';
+import Radium, { StyleRoot } from 'radium';
 
 const App = props => {
   const initialState = {
@@ -107,16 +107,18 @@ const App = props => {
   }
 
   return ( 
-    <div className="App"> 
-      <header className="App-header">
-        <p className={classes.join(' ')}>Working dynamic styles!</p>
-        <button 
-          style={style}
-          onClick={togglePersonHandler}
-        >Show People</button>
-        {people}
-      </header>
-    </div>
+    <StyleRoot>
+      <div className="App"> 
+        <header className="App-header">
+          <p className={classes.join(' ')}>Working dynamic styles!</p>
+          <button 
+            style={style}
+            onClick={togglePersonHandler}
+          >Show People</button>
+          {people}
+        </header>
+      </div>
+    </StyleRoot>
   );
 }
 
