@@ -216,6 +216,7 @@ CSS modules allow to **scope** the styles only to the component (styles are not 
 - create a CSS module stylesheet file `moduleName.module.css`,
 - in the component file, **import** the CSS module as **styles** `import styles from './moduleName.module.css'`,
 - in the component file, **access** the class name on the _styles_ object with dot notation `<Element className={styles.className1} />` or with square brackets `<Element className={styles['class-name-1']} />`,
+- **nested classes** are available too, `button.danger { ... }` can be accessed as `className={styles.danger}` on a _button_ element,
 - the CSS module's class name results in **[filename]\_[classname]\_\_[hash]**,
 - **example**: 
 
