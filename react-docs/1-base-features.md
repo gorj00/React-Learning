@@ -425,7 +425,20 @@ class People extends Component {
 }
 ```
 ### 5.2 Passing Values in Functional Components
-- TODO: Not in the tutorial, maybe doable with React Hooks
+#### 5.2.1 Using arrow function
+- Chnage method call reference into an arrow function returning method call,
+- assuming the example of class component arrow function passing a value above, **example** of functional component implementation: 
+```jsx
+// ...component code
+
+// ... inside return()
+<Person 
+    name={peopleState.persons[1].name} 
+    age={peopleState.persons[1].age}
+    // using arrow function 
+    clickReference={() => switchNameHandler('Jack')}
+/>
+```
 
 ## 6 Two-way Binding
 ### 6.1 Class Components
