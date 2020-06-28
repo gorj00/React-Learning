@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './App.css';
-import Person from './Person/Person';
 import Radium, { StyleRoot } from 'radium';
-
+import People from '../components/People/People';
+import Cockpit from '../components/Cockpit/Cockpit';
 const App = props => {
   const initialState = {
     persons: [
@@ -58,19 +58,6 @@ const App = props => {
     });
   }
 
-  const style = {
-    backgroundColor: 'white',
-    font: 'inherit',
-    border: '1px solid grey',
-    padding: '8px',
-    cursor: 'pointer',
-    ':hover': {
-      backgroundColor: 'lightgreen',
-      color: 'black'
-    }
-  };
-
-  const classes = [];
 
   // Handling conditional logic for people
   let people = null;
@@ -78,43 +65,24 @@ const App = props => {
     people = (
       // JSX expression
       <div>
-        {peopleState.persons.map((person, index) => {
-          return (
-            <Person
-              name={person.name}
-              age={person.age}
-              change={event => nameChangeHandler(event, person.id)}
-              clickRef={() => deletePersonHandler(index)}
-              key={person.id}
-            />
-          );
-        })}
+        <People 
+          persons={peopleState.persons}
+          change={nameChangeHandler}
+          clickRef={deletePersonHandler}
+        />
       </div>
     );
-
-    if (peopleState.persons.length <= 2) {
-      classes.push('red'); // classes = ['red']
-    }
-    if (peopleState.persons.length <= 1) {
-        classes.push('bold'); // classes = ['bold']
-    }
-
-    style.backgroundColor = 'red';
-    style[':hover'] = {
-      backgroundColor: 'salmon',
-      color: 'black'
-    }
   }
 
   return ( 
     <StyleRoot>
       <div className="App"> 
         <header className="App-header">
-          <p className={classes.join(' ')}>Working dynamic styles!</p>
-          <button 
-            style={style}
-            onClick={togglePersonHandler}
-          >Show People</button>
+          <Cockpit 
+            showPeople={peopleState.showPeople}
+            people={peopleState.persons}
+            clicked={togglePersonHandler}
+          />
           {people}
         </header>
       </div>
