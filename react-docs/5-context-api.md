@@ -50,7 +50,7 @@ To prevent creating a deep **props chain** when sharing props across multiple ne
     );
 ```
 
-### 2.2 Consuming values
+### 2.2 Consuming values in JSX
 - it is used as a **component with Consumer property** `<ContextComponent.Consumer>`,
 - it doesn't take the wrapped JSX code as children props property, it takes it as an **function** with **context parameter**
 ```jsx
@@ -178,3 +178,40 @@ To prevent creating a deep **props chain** when sharing props across multiple ne
     )
 
 ```
+## 3 Consuming Context Values in Component Logic (and JSX)
+### 3.1 Class Components
+- Add a static property **contextType**,
+- **assign** it the imported context obbject,
+- **access** the context object on **this.context** property of the class component:
+
+```jsx
+import React, { Component} from 'react';
+import FeatureContext from 'context/feature-context';
+
+class Person extends Component {
+    static contextType = FeatureContext;
+
+    componentDidMount() {
+        console.lgo(this.context.authenticated);
+    }
+
+    // ... component JSX
+}
+```
+
+### 3.2 Functional Components
+- Use **useContext()** hook and store it in a constant
+
+```jsx
+import React, { useContext } from 'react';
+import FeatureContext from 'context/feature-context';
+
+const cockpit = props => {
+    const featureContext = useContext(FeatureContext);
+
+    console.log(featureContext.authenticated);
+    
+    // ... component JSX
+}
+```
+

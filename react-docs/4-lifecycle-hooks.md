@@ -128,8 +128,9 @@ class Person extends Component {
 
 ## 3 Functional Components – React Hooks
 ### 3.1 useState, userRef and useEffect
-- **useState** is already covered in the [first chapter (section 4)](1-base-features.md),
-- **useRef** is already covered in the [first chapter (section 8)](1-base-features.md),
+- **useState** is covered in the [first chapter (section 4)](1-base-features.md),
+- **useRef** is covered in the [first chapter (section 8)](1-base-features.md),
+- **useContext** is covered in the [fifth chapter (section 3)](5-context-api.md),
 - **useEffect** React hook is a functional component alternative to **all important** class component lifecycle hooks.
     - **import** _useEffect_ from React,
     - it takes an **anonymous function** that will run for **every render cycle** (component creation or update),
