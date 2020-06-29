@@ -24,4 +24,11 @@ Made based on [this course](https://www.udemy.com/course/react-the-complete-guid
 1. **[CONTEXT API – SHARING DATA ACROSS NESTED COMPONENTS](./5-context-api.md)**
     1. **Sharing Data in Nested Components**
     1. **Create Context**
+1. **[AXIOS - HTTP REQUESTS](./6-axios-http-requests.md)**
+    1. **Axios**
+    1. **HTTP Requests**
+    1. **Error Handling**
+    1. **Interceptors**
+    1. **Axios Default Global Configuration**
+    1. **Axios Instances**
 
