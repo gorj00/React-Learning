@@ -1,4 +1,5 @@
 # React Docs – Chapters
+Made based on [this course](https://www.udemy.com/course/react-the-complete-guide-incl-redux/).
 
 1. **[BASE FEATURES](./1-base-features.md)**
     1. **React Components Basics**
