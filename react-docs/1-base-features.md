@@ -4,13 +4,27 @@ _...return to React Docs [chapters](./readme.md)_
 ## 1 React Components Basics
 ### 1.1 JSX restrictions
 - do not use in HTML **class** => use className `<div className="some-class">`,
-- return only one **root element** in render method _(may be allowed in later versions of React to return multiples)_:
+- return only one **root element** in render method _(may be allowed in later versions of React to return multiples)_,
+- may be handled with React's Fragment component (wraps JSX into one root element):
 ```jsx
+import React from 'react';
+
 render() {
     return (
         <div className="root-component">
             ... everything else
         </div>
+    );
+}
+
+// or
+import React, { Fragment } from 'react';
+
+render() {
+    return (
+        <Fragment>
+            ... everything else
+        </Fragment>
     );
 }
 ```
@@ -74,6 +88,7 @@ class Person extends Component {
 
 ## 2 Component Inputs – _props_ (setting info from outside)
 ### 2.1 Component's Attributes as Props Properties
+#### 2.1.1 Setup Props
 - In component implementation (parent component returning JSX), define the **components attributes** (_name_ and _age_ as examples below): 
 ```jsx
 // ParentComponent.js
@@ -98,6 +113,29 @@ const component = (props) => {
     );
 ```
 - <span style="color:red">important</span>: in **class components**, you access the attributes with **this.props** `<p>I am {this.props.name} and I am {this.props.age} years old.</p>`
+
+#### 2.1.2 PropTypes
+- To define and type all the props the component accepts,
+- install **prop-types** package with: `npm install --save prop-types`,
+- import **PropTypes** from the package in your component,
+- after component definition, define a **propTypes** property of your component and **assign** it a JS object containing types for your prop over **PropTypes**
+```jsx
+// Person.js
+
+    import React from 'react';
+    import PropTypes from 'prop-types';
+
+    // ... component definition
+
+    Person.propTypes = {
+        click: PropTypes.func,
+        name: PropTypes.string,
+        age: PropTypes.number,
+        changed: PropTypes.func
+    }
+
+    export default Person;
+```
 
 ### 2.2 Content Between Opening and Closing Tag – _children_ Property of _props_
 - Place content between opening and closing tags while implementing a component: 
@@ -128,6 +166,11 @@ const component = (props) => {
 ### 2.3 Passing method reference between components
 - Useful for a child component trigerring a parent's method,
 - see [section 5](#ref-between-components)
+
+### 2.4 Data (Props-like) Across Multiple Nested Components – Context API
+To prevent creating a deep **props chain** when sharing props across multiple nested components, use **Context API**, it is possible to use _Redux_ as an alternative.
+
+- For Context API, go to [chapter 5](./5-context-api.md)
 
 ## 3 Class Component State (setting info from inside)
 - Every component extending _React Component_ has a reserved **state** property which allows to define it from inside the component,
@@ -181,6 +224,7 @@ export default People;
      - you pass only a **reference** name of the method, not the method itself
 
 ### 3.2 State Manipulation
+#### 3.2.1 setState()
 - State **must not be mutated/changed** directly as this: 
 ```jsx
   switchNameHandler = () => {
@@ -188,7 +232,7 @@ export default People;
     this.state.persons[0].name = 'Peter'; 
   }
 ```
-- it **must** be mutated only with the **setState** method, it takes an object as an argument and it **merges** with the original state
+- it **must** be mutated only with the **setState** method, it takes an object as an argument and it **merges** with the original state,
 - therefore, it changes the part of the state defined in the passed object in the _setState_ method and it keeps the rest of the state untouched and it includes it in the updated state
 ```jsx
   state = {
@@ -217,6 +261,23 @@ persons: [
     { name: 'Mia', age: 22} // used to be Anne and 30
 ],
 iWillBeKept: true, // untouched and merged
+```
+#### 3.2.1 setState(prevState, props) – Change Depends on Previous State
+- **warning**: if depending on an _older version_ of state (for example `changeCounter: this.state.changeCounter + 1`), it does not have to execute immediately, it is only "scheduled"; therefore, we work with _unexpected_ state (wrong counter number may occur),
+- **solution**: provide _setState_ with arguments of **previous state** and **props**
+```jsx
+// May be faulty: 
+//  this.setState({
+//      changeCounter: this.state.changeCounter + 1
+//  });
+
+// Use instead: 
+        this.setState((prevState, props) => {
+            return {
+                // use prevState
+                changeCounter: prevState.changeCounter + 1
+            };
+    });
 ```
 
 ## 4 Functional Component State (setting info from inside with React hooks)
@@ -557,3 +618,171 @@ return (
 );
 ```
 
+## 7 HOC – Higher Level Component
+- HIC **wraps** another component, may add to the wrapped component:
+    - styling,
+    - additional JSX structure,
+    - logic
+- convention of naming - **With** at the beginning `WithClass.js`,
+- the same HOC can be written in two ways:
+    - **JSX implementation**: suitable more for _styling_ and _additional JSX structure_ cases,
+    - **export implementation**: suitable more for _logic_ cases,
+- **examples**: Radium, React.Fragment, component setting a div with class on a component
+
+### 7.1 HOC – JSX Implementation
+Component providing a class div **example**: 
+```jsx
+// WithClass.js
+
+    import React from 'react';
+
+    const WithClass = props => (
+        <div className={props.classes}>{props.children}</div>
+    );
+
+    export default WithClass;
+```
+```jsx
+// WrappedComponent.js
+
+    import WithClass from './WithClass';
+
+    // ... component code
+    return(
+        <WithClass classes={styleObject['text-in-bold-class']}>
+            // ... WrappedComponent JSX
+        </WithClass>
+    );
+
+    export default WrappedComponent;
+```
+### 7.2 HOC – Export Implementation
+- A regular JS function, where its arguments must be:
+    - **reference** to the **wrapped component**,
+    - **arguments specific** to this HOC (can be multiple),
+- return a **function body**, where you:
+    - return a **functional component**,
+    - handle **unknown props** with spread operator inside JS object `{...props}`
+
+Component providing a class div **example**: 
+```jsx
+// withClass.js
+
+    import React from 'react';
+
+    const withClass = (ComponentRef, className) => {
+        return props => (
+            <div className={className}>
+                <ComponentRef {...props}/>
+            </div>
+        );
+    };
+
+    export default withClass;
+```
+```jsx
+// WrappedComponent.js
+
+    import withClass from './withClass';
+
+    // ... component code
+    return(
+            // ... WrappedComponent JSX
+    );
+
+    export default withClass(WrappedComponent, styleObject['text-in-bold-class']);
+```
+ or Component
+## 8 Reference (Element and Component Manipulation)
+- Manipulation of the element or component,
+- use **ref**, a special property placed on the element or component
+
+### 8.1 Class Component Reference
+### 8.1.1 Reference with _passed function on element's property_
+- older approach,
+- pass an **anonymous function** with an argument of the element it is placed on,
+- store it in a **global** property - to have access to it anywhere in your app
+```jsx
+import React, { Component } from 'react';
+class Person extends Component {
+    // ... component code
+
+    componentDidMount() {
+        this.inputElement.focus();
+    }
+
+    render(
+        return(
+            <Aux>
+                <input 
+                    type="text"
+                    value={this.props.name}
+                    onChange={this.props.changed}
+                    ref={inputEl => {this.inputElement = inputEl}}
+                />
+            </Aux>
+        );
+    ) ;
+}
+```
+### 8.1.2 Reference with _createRef()_
+- modern approach, 
+- uses **constructor** and React's **createRef()** method,
+- access the element or component on **current** property of the reference
+
+```jsx
+import React, { Component } from 'react';
+class Person extends Component {
+    constructor(props) {
+        super(props);
+        this.inputElementRef = React.createRef();
+    }
+
+    // ... component code
+
+    componentDidMount() {
+        // current property of the reference
+        this.inputElementRef.current.focus();
+    }
+
+    render(
+        return(
+            <Aux>
+                <input 
+                    type="text"
+                    value={this.props.name}
+                    onChange={this.props.changed}
+                    ref={this.inputElementRef}
+                />
+            </Aux>
+        );
+    ) ;
+}
+```
+### 8.2 Functional Component Reference
+- Only modern approach is possible with the use of **useRef()** React hook,
+- **import** _useRef_ from react,
+- create a constant, store _useRef()_,
+- you can store **initial values**,
+- **manipulate** the referenced element with the use of _useEffect()_ hook (because we need the manipulation happen _after_ the JSX is rendered and the reference is set up),
+- access the element or component on **current** property of the reference
+```jsx
+import React, { useEffect, useRef } from 'react';
+
+const cockpit = props => {
+    const toggleBtnRef = useRef(null);
+
+    // Runs on create component only
+    useEffect(() => {
+        toggleBtnRef.current.click();
+    }, []);
+
+    return(
+            <Aux>
+                <button ref={toggleBtnRef}>
+                    Click me!
+                </button>
+            </Aux>
+        );
+}
+```

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './App.css';
-import Radium, { StyleRoot } from 'radium';
 import People from '../components/People/People';
 import Cockpit from '../components/Cockpit/Cockpit';
 const App = props => {
@@ -75,19 +74,17 @@ const App = props => {
   }
 
   return ( 
-    <StyleRoot>
-      <div className="App"> 
-        <header className="App-header">
-          <Cockpit 
-            showPeople={peopleState.showPeople}
-            people={peopleState.persons}
-            clicked={togglePersonHandler}
-          />
-          {people}
-        </header>
-      </div>
-    </StyleRoot>
+    <div className="App"> 
+      <header className="App-header">
+        <Cockpit 
+          showPeople={peopleState.showPeople}
+          peopleLength={peopleState.persons.length}
+          clicked={togglePersonHandler}
+        />
+        {people}
+      </header>
+    </div>
   );
 }
 
-export default Radium(App);
+export default React.memo(App);

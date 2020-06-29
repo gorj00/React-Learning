@@ -15,4 +15,4 @@ const people = props => (
       })
 );
 
-export default people;
+export default React.memo(people);
